@@ -1,0 +1,56 @@
+---
+title: "Pick the Lowest Unique Number"
+author: "Stephen Kaluzny"
+date: "December 10, 2015"
+output: html_document
+---
+
+This is a simple number contest - each person in a group picks a positive integer. The person who selects the smallest value that no else in the group has selected, wins.
+
+```{r echo=FALSE}
+library(ggplot2)
+```
+# The Data
+Members of the statsoftful Google group were asked via email to send their selected number to me.
+
+The data was entered in a CSV file with Name and Number columns.
+The rows are ordered by the time the email was submitted, older entries first.
+The data is available on github, see the appendix.
+
+```{r}
+statsoftfulDF <- read.csv("statsoftful.txt", header=TRUE, stringsAsFactors = FALSE)
+```
+
+The group has 84 members but only `r nrow(statsoftfulDF)` people submitted a number.
+
+The data collected over time:
+
+```{r}
+plt01 <- ggplot(data=statsoftfulDF, aes(x=1:nrow(statsoftfulDF), y=Number))
+plt01 + geom_point() + xlab("Time Order")
+```
+
+# Analysis
+The distribution of the numbers selected:
+```{r}
+plt02 <- ggplot(data=statsoftfulDF, aes(x=Number))
+plt02 + geom_bar(binwidth=1, fill="blue")
+```
+
+The winner:
+```{r}
+tabNumber <- table(statsoftfulDF$Number)
+if(!any(tabNumber == 1)) {
+  cat("No winner since there is no unique number\n")
+} else {
+  winNumber <- as.numeric(names(tabNumber[tabNumber == 1][1]))
+  winName <- statsoftfulDF$Name[statsoftfulDF$Number == winNumber]
+  cat("Winner: ", winName, "Number:", winNumber, "\n")
+}
+```
+The unique numbers:
+```{r}
+names(tabNumber[tabNumber == 1])
+```
+# Appnedix
+The source for this document and the data are available on github at:
