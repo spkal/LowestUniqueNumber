@@ -21,7 +21,7 @@ The rows are ordered by the time the email was submitted, older entries first.
 The data is available on github, see the appendix.
 
 ```{r}
-statsoftfulDF <- read.csv("statsoftful.txt", header=TRUE, stringsAsFactors = FALSE)
+statsoftfulDF <- read.csv("statsoftful.csv", header=TRUE, stringsAsFactors = FALSE)
 ```
 
 The group has 84 members but only `r nrow(statsoftfulDF)` people submitted a number.
@@ -59,4 +59,4 @@ as.numeric(names(tabNumber[tabNumber == 1]))
 The source for this document and the data are available on github at:
 https://github.com/spkal/LowestUniqueNumber
 
-This is a reproducible analysis, created using R, Rstudio and the knitr package. To reproduce the analysis, download the R Markdown file, LowestUniqueNumberStatSoftFul.Rmd, and the data file, statsoftful.txt, from the Github site listed above. Open the R Markdown file in Rstudio and select the Knit HTML tab at the top of the Markdown file window. 
+This is a reproducible analysis, created using R, Rstudio and the knitr package. To reproduce the analysis, download the R Markdown file, LowestUniqueNumberStatSoftFul.Rmd, and the data file, statsoftful.csv, from the Github site listed above. Open the R Markdown file in Rstudio and select the Knit HTML tab at the top of the Markdown file window. 
