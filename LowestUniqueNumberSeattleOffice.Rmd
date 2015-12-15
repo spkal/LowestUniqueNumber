@@ -1,0 +1,62 @@
+---
+title: "Pick the Lowest Unique Number - Seattle Office"
+author: "Stephen Kaluzny"
+date: "December 15, 2015"
+output: html_document
+---
+This is a simple number contest - each person in a group picks a positive integer. The person who selects the smallest value that no else in the group has selected, wins.
+
+The initial idea for the game came from https://plus.maths.org/content/playing-number.
+
+This document is a reproducible analysis, see the Appendix for details.
+
+```{r echo=FALSE}
+library(ggplot2)
+```
+## The Data
+People in the Seattle TIBCO office were asked via email to send their selected number to me.
+
+The data was entered in a CSV file with Name and Number columns.
+Since the data is public on Github, the respondent's name was replaced by
+`responderi`, where i is the numeric value of the order the entry was received.
+The rows are ordered by the time the email was submitted, older entries first.
+```{r}
+seattleofficeDF <- read.csv("seattleoffice.csv", header=TRUE, stringsAsFactors = FALSE)
+# seattleofficeDF <- read.csv("seattleoffice_with_names.csv", header=TRUE, stringsAsFactors = FALSE)
+```
+The Seattle Office email list has 50 members but only `r nrow(seattleofficeDF)` people submitted a number.
+
+The data collected over time:
+
+```{r}
+plt01 <- ggplot(data=seattleofficeDF, aes(x=1:nrow(seattleofficeDF), y=Number))
+plt01 + geom_point() + xlab("Time Order")
+```
+
+## Analysis
+The distribution of the numbers selected:
+```{r}
+plt02 <- ggplot(data=seattleofficeDF, aes(x=Number))
+plt02 + geom_bar(binwidth=1, fill="blue")
+```
+
+The winner:
+```{r}
+tabNumber <- table(seattleofficeDF$Number)
+if(!any(tabNumber == 1)) {
+  cat("No winner since there is no unique number\n")
+} else {
+  winNumber <- as.numeric(names(tabNumber[tabNumber == 1][1]))
+  winName <- seattleofficeDF$Name[seattleofficeDF$Number == winNumber]
+  cat("Winner: ", winName, "Number:", winNumber, "\n")
+}
+```
+The unique numbers:
+```{r}
+as.numeric(names(tabNumber[tabNumber == 1]))
+```
+# Appendix
+The source for this document and the data are available on github at:
+https://github.com/spkal/LowestUniqueNumber
+
+This is a reproducible analysis, created using R, Rstudio and the knitr package. To reproduce the analysis, download the R Markdown file, `LowestUniqueNumberStatSoftFul.Rmd`, and the data file, `seattleoffice.csv` from the Github site listed above. Open the R Markdown file in Rstudio and select the Knit HTML tab at the top of the Markdown file window. 
