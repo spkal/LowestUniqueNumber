@@ -1,0 +1,86 @@
+---
+title: "Pick the Lowest Unique Number - Combined Analysis"
+author: "Stephen Kaluzny"
+date: "December 14, 2015"
+output: html_document
+---
+This is a simple number contest - each person in a group picks a positive integer. The person who selects the smallest value that no else in the group has selected, wins.
+
+The initial idea for the game came from https://plus.maths.org/content/playing-number
+
+This document is a reproducible analysis, see the Appendix for details.
+
+```{r echo=FALSE}
+library(ggplot2)
+```
+## The Data
+People in the Seattle TIBCO office were asked via email to send their selected number to me.
+A second data set was created by asking 
+members of the statsoftful Google group to also participate.
+
+The data for each was entered in a CSV file with Name and Number columns.
+Since the data is public on Github,
+the respondent's name for the Seattle TIBCO office was replaced by `responderi`,
+ where i is the numeric value of the order the entry was received.
+The rows in each data set are ordered by the time the email was submitted, older entries first.
+The data files are available on github, see the appendix.
+
+Reading the data and combining:
+```{r}
+# seattleofficeDF <- read.csv("seattleoffice.csv", header=TRUE, stringsAsFactors = FALSE)
+seattleofficeDF <- read.csv("seattleoffice_with_names.csv", header=TRUE, stringsAsFactors = FALSE)
+statsoftfulDF <- read.csv("statsoftful.csv", header=TRUE, stringsAsFactors = FALSE)
+seattlecombinedDF <- rbind(seattleofficeDF, statsoftfulDF)
+```
+A few individuals submitted numbers to both data sets, we will remove their
+entries submitted to the statsoftfulDF:
+```{r}
+dupPeople <- c("Joe R.", "Walter Y.", "Burl E.")
+dupIndx <- match(dupPeople, seattlecombinedDF$Name)
+seattlecombinedDF <- seattlecombinedDF[-dupIndx, ]
+```
+
+The statsoftful group has 84 members but only `r nrow(statsoftfulDF)` people submitted a number.
+The Seattle Office email list has 50 members but only `r nrow(seattleofficeDF)` people submitted a number.
+
+The number of observations in `seattlecombinedDF` is `r nrow(seattlecombinedDF)`.
+
+The data collected over time:
+
+```{r}
+plt01 <- ggplot(data=seattlecombinedDF, aes(x=1:nrow(seattlecombinedDF), y=Number))
+plt01 + geom_point() + xlab("Time Order")
+```
+
+## Analysis
+The distribution of the numbers selected:
+```{r}
+plt02 <- ggplot(data=seattlecombinedDF, aes(x=Number))
+plt02 + geom_bar(binwidth=1, fill="blue")
+```
+
+The winner:
+```{r}
+tabNumber <- table(seattlecombinedDF$Number)
+if(!any(tabNumber == 1)) {
+  cat("No winner since there is no unique number\n")
+} else {
+  winNumber <- as.numeric(names(tabNumber[tabNumber == 1][1]))
+  winName <- seattlecombinedDF$Name[seattlecombinedDF$Number == winNumber]
+  cat("Winner: ", winName, "Number:", winNumber, "\n")
+}
+```
+The unique numbers:
+```{r}
+as.numeric(names(tabNumber[tabNumber == 1]))
+```
+# Appendix
+The source for this document and the data are available on github at:
+https://github.com/spkal/LowestUniqueNumber
+
+This is a reproducible analysis, created using R, Rstudio and the knitr package.
+To reproduce the analysis, download the R Markdown file,
+`LowestUniqueNumberSeattleCombined.Rmd`,
+and the data files, `statsoftful.csv` and `seattleoffice.csv`.
+from the Github site listed above. Open the R Markdown file in Rstudio
+and select the Knit HTML tab at the top of the Markdown file window. 
