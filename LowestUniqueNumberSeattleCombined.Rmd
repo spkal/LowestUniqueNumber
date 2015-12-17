@@ -1,7 +1,7 @@
 ---
 title: "Pick the Lowest Unique Number - Combined Analysis"
 author: "Stephen Kaluzny"
-date: "December 14, 2015"
+date: "December 16, 2015"
 output: html_document
 ---
 This is a simple number contest - each person in a group picks a positive integer. The person who selects the smallest value that no else in the group has selected, wins.
@@ -27,8 +27,8 @@ The data files are available on github, see the appendix.
 
 Reading the data and combining:
 ```{r}
-# seattleofficeDF <- read.csv("seattleoffice.csv", header=TRUE, stringsAsFactors = FALSE)
-seattleofficeDF <- read.csv("seattleoffice_with_names.csv", header=TRUE, stringsAsFactors = FALSE)
+seattleofficeDF <- read.csv("seattleoffice.csv", header=TRUE, stringsAsFactors = FALSE)
+# seattleofficeDF <- read.csv("seattleoffice_with_names.csv", header=TRUE, stringsAsFactors = FALSE)
 statsoftfulDF <- read.csv("statsoftful.csv", header=TRUE, stringsAsFactors = FALSE)
 seattlecombinedDF <- rbind(seattleofficeDF, statsoftfulDF)
 ```
